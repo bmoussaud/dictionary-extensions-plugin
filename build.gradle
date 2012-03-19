@@ -1,0 +1,21 @@
+commonBuildPath = hasProperty("localCommonBuildRepo") ? file(localCommonBuildRepo).toURL().toString() : 'https://github.com/xebialabs/deployit-common-build/raw/master'
+
+apply from: "$commonBuildPath/repositories.gradle"
+apply from: "$commonBuildPath/plugin-build.gradle"
+
+version = '3.7.0-beta-2-SNAPSHOT'
+
+
+dependencies {
+	compile deps.deployit_jee_plugin
+	compile deps.deployit_generic_plugin
+	compile deps.deployit_remoting_plugin
+	compile deps.overthere
+	compile deps.commons_httpclient
+
+	testCompile deps.commons_io
+	testCompile deps.commons_lang
+
+}
+
+
