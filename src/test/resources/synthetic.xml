@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<synthetic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.xebialabs.com/deployit/synthetic"
+           xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
+
+
+	<type type="ext.MyTypedDictionary" extends="ext.TypedDictionary" description="a Typed dictionary for test">
+		<property name="aString"/>
+		<property name="aPassword" password="true"/>
+		<property name="aInteger" kind="integer"/>
+		<property name="aBoolean" kind="boolean"/>
+		<property name="anEnum" kind="enum" enum-class="com.xebialabs.deployit.plugins.dictionary.MyEnum"/>
+		<property name="aSetOfStrings" kind="set_of_string"/>
+		<property name="aListOfStrings" kind="list_of_string"/>
+		<property name="aMapOfStringString" kind="map_string_string"/>
+		<property name="anHiddenProperty" kind="string" hidden="true" default="X"/>
+	</type>
+
+
+</synthetic>

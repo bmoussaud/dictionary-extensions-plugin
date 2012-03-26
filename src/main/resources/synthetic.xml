@@ -25,4 +25,8 @@
         <property name="createOrder" kind="integer" hidden="true" default="100" />
     </type>
     -->
+	<type-modification type="ext.TypedDictionary">
+		<property name="entries" kind="map_string_string" required="false" default="{}" hidden="true"/>
+	</type-modification>
+
 </synthetic>
