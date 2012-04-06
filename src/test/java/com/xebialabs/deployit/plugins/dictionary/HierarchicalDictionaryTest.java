@@ -11,9 +11,8 @@ import java.util.Map;
 
 import static com.google.common.collect.ImmutableList.of;
 import static com.xebialabs.deployit.test.support.TestUtils.newInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class HierarchicalDictionaryTest {
 

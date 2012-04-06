@@ -1,21 +1,79 @@
-commonBuildPath = hasProperty("localCommonBuildRepo") ? file(localCommonBuildRepo).toURL().toString() : 'https://github.com/xebialabs/deployit-common-build/raw/master'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
 
-apply from: "$commonBuildPath/repositories.gradle"
-apply from: "$commonBuildPath/plugin-build.gradle"
+group = 'com.xebialabs.deployit.community'
+apiVersion = '3.7.0'
+version = "${apiVersion}-1-SNAPSHOT"
 
-version = '3.7.0-beta-2-SNAPSHOT'
-
+sourceCompatibility = 1.6
+sourceEncoding = 'UTF-8'
 
 dependencies {
-	compile deps.deployit_jee_plugin
-	compile deps.deployit_generic_plugin
-	compile deps.deployit_remoting_plugin
-	compile deps.overthere
-	compile deps.commons_httpclient
+  compile "com.xebialabs.deployit:udm-plugin-api:$apiVersion"
+  compile "com.xebialabs.deployit:server-plugin-api:$apiVersion"
 
-	testCompile deps.commons_io
-	testCompile deps.commons_lang
 
+  compile "com.google.guava:guava:10.0.1"
+
+  testCompile 'junit:junit:4.10'
+  testCompile "com.xebialabs.deployit.plugins:generic-plugin:$apiVersion"
+  testCompile "com.xebialabs.deployit:udm-test-support:$apiVersion"
 }
 
+repositories {
+  mavenLocal()
+  if (!rootProject.hasProperty('offline')) {
+    mavenCentral()
+    maven {
+      credentials {
+        username nexusUserName
+        password nexusPassword
+      }
+      url "${nexusBaseUrl}/repositories/releases"
+    }
+  }
+}
 
+afterEvaluate { eachProject ->
+  Set testTasks = eachProject.tasks.withType(Test)
+
+  testTasks.each { testTask ->
+    testTask.onlyIf { !project.hasProperty('skipTests') }
+    testTask.afterSuite { descriptor, result ->
+      if (descriptor.className != null) {
+        println "${descriptor.className}: ${result.testCount} tests; failed: ${result.failedTestCount}; skipped: ${result.skippedTestCount}"
+      } else if (descriptor.className == null && descriptor.parent == null) {
+        println "Total: ${result.testCount} tests; failed: ${result.failedTestCount}; skipped: ${result.skippedTestCount}"
+      }
+    }
+  }
+}
+
+task generatePom << {
+  pom {
+    project {
+      build {
+        plugins {
+          plugin {
+            artifactId 'maven-compiler-plugin'
+            version '2.3'
+            configuration {
+              encoding = sourceEncoding
+              source = "${sourceCompatibility}".toString()
+              target = "${sourceCompatibility}".toString()
+            }
+          }
+          plugin {
+            artifactId 'maven-resources-plugin'
+            version '2.3'
+            configuration {
+              encoding = sourceEncoding
+            }
+          }
+        }
+      }
+    }
+  }.writeTo('pom.xml')
+}
