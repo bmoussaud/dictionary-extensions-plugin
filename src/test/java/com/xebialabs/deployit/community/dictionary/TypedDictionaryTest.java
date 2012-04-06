@@ -22,7 +22,8 @@ public class TypedDictionaryTest {
 
 	@Test
 	public void test1() throws Exception {
-		final Dictionary typedDictionary = TestUtils.newInstance("ext.MyTypedDictionary");
+		final Dictionary typedDictionary = TestUtils.newInstance("test.MyTypedDictionary");
+
 		typedDictionary.setProperty("aString", "foo");
 		typedDictionary.setProperty("aPassword", "tiger");
 		typedDictionary.setProperty("aInteger", 128);

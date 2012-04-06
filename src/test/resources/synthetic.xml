@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
 
 
-	<type type="ext.MyTypedDictionary" extends="ext.TypedDictionary" description="a Typed dictionary for test">
+	<type type="test.MyTypedDictionary" extends="dict.TypedDictionary" description="a Typed dictionary for test">
 		<property name="aString"/>
 		<property name="aPassword" password="true"/>
 		<property name="aInteger" kind="integer"/>

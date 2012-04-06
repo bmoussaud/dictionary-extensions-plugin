@@ -42,7 +42,7 @@ public class StackedDictionaryTest {
 		d4.setProperty("entries", ImmutableMap.of("Y", "2"));
 
 
-		hd = newInstance("ext.StackedDictionary");
+		hd = newInstance("dict.StackedDictionary");
 
 	}
 
