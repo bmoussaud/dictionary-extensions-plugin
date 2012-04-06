@@ -14,7 +14,7 @@ import static com.xebialabs.deployit.test.support.TestUtils.newInstance;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class HierarchicalDictionaryTest {
+public class StackedDictionaryTest {
 
 	private Dictionary d1;
 	private Dictionary d2;
@@ -42,7 +42,7 @@ public class HierarchicalDictionaryTest {
 		d4.setProperty("entries", ImmutableMap.of("Y", "2"));
 
 
-		hd = newInstance("ext.HierarchicalDictionary");
+		hd = newInstance("ext.StackedDictionary");
 
 	}
 

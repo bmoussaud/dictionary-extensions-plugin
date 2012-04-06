@@ -14,7 +14,7 @@ import static com.xebialabs.deployit.plugin.api.udm.Metadata.ConfigurationItemRo
 
 
 @Metadata(root = ENVIRONMENTS, description = "A Dictionary contains list of dictionaries that will be interrogated following the order of a list of other dictionaries.")
-public class HierarchicalDictionary extends Dictionary {
+public class StackedDictionary extends Dictionary {
 
 	@Property(description = "The list of dictionaries, the data contained in the first dictionaries will override the data of the next dictionary, and so on...", required = false)
 	private List<Dictionary> dictionaries = newArrayList();
