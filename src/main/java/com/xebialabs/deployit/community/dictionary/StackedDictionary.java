@@ -35,22 +35,22 @@ public class StackedDictionary extends Dictionary {
 	}
 
 	Map<String, String> buildHierarchicalEntries() {
-		final Map<String, String> hentries = Maps.newHashMap();
+		final Map<String, String> allEntries = Maps.newHashMap();
 
 		if (dictionaries != null && !dictionaries.isEmpty()) {
 			for (Dictionary dictionary : reverse(dictionaries)) {
 				final Map<String, String> entries = dictionary.getEntries();
 				if (entries != null) {
-					hentries.putAll(entries);
+					allEntries.putAll(entries);
 				}
 			}
 		}
 
 		Map<String, String> entries = getProperty("entries");
 		if (entries != null) {
-			hentries.putAll(entries);
+			allEntries.putAll(entries);
 		}
-		return hentries;
+		return allEntries;
 	}
 
 }
