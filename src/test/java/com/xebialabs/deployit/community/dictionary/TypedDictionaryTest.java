@@ -1,4 +1,4 @@
-package com.xebialabs.deployit.plugins.dictionary;
+package com.xebialabs.deployit.community.dictionary;
 
 import com.xebialabs.deployit.plugin.api.boot.PluginBooter;
 import com.xebialabs.deployit.plugin.api.udm.Dictionary;

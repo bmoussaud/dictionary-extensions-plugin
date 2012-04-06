@@ -9,7 +9,7 @@
 		<property name="aPassword" password="true"/>
 		<property name="aInteger" kind="integer"/>
 		<property name="aBoolean" kind="boolean"/>
-		<property name="anEnum" kind="enum" enum-class="com.xebialabs.deployit.plugins.dictionary.MyEnum"/>
+		<property name="anEnum" kind="enum" enum-class="com.xebialabs.deployit.community.dictionary.MyEnum"/>
 		<property name="aSetOfStrings" kind="set_of_string"/>
 		<property name="aListOfStrings" kind="list_of_string"/>
 		<property name="aMapOfStringString" kind="map_string_string"/>

@@ -1,4 +1,4 @@
-package com.xebialabs.deployit.plugins.dictionary;
+package com.xebialabs.deployit.community.dictionary;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
