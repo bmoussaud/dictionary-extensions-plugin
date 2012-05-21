@@ -1,7 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'maven'
+commonBuildPath = hasProperty("localCommonBuildRepo") ? file(localCommonBuildRepo).toURL().toString() : 'https://github.com/xebialabs/deployit-common-build/raw/3.7.x-maintenance'
+
+apply from: "$commonBuildPath/repositories.gradle"
+apply from: "$commonBuildPath/plugin-build.gradle"
 
 group = 'com.xebialabs.deployit.community'
 apiVersion = '3.7.0'
@@ -18,7 +18,7 @@ dependencies {
   compile "com.google.guava:guava:10.0.1"
 
   testCompile 'junit:junit:4.10'
-  testCompile "com.xebialabs.deployit.plugins:generic-plugin:$apiVersion"
+  testCompile  deps.deployit_generic_plugin
   testCompile "com.xebialabs.deployit:udm-test-support:$apiVersion"
 }
 
