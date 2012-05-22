@@ -16,5 +16,10 @@
 		<property name="anHiddenProperty" kind="string" hidden="true" default="X"/>
 	</type>
 
+    <type type="test.DeployedFile" extends="generic.CopiedArtifact" deployable-type="test.File" container-type="overthere.LocalHost">
+        <generate-deployable type="test.File" extends="generic.File"/>
+        <property name="targetDirectory"/>
+    </type>
+
 
 </synthetic>
