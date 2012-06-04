@@ -42,6 +42,10 @@ public class Predicates2 {
 		return new OperationEquals(operationToMatch);
 	}
 
+	public static Predicate<Object> equalToAny(Collection<?> items) {
+		return new EqualToAny(items);
+	}
+
 	private static class OperationEquals implements Predicate<Delta> {
 		private final Operation operationToMatch;
 
@@ -76,6 +80,20 @@ public class Predicates2 {
 					? input.getPrevious()
 					: input.getDeployed());
 		}
+	}
+
+	private static class EqualToAny implements Predicate<Object> {
+		private final Collection<?> items;
+
+		private EqualToAny(Collection<?> items) {
+			this.items = items;
+		}
+
+		@Override
+		public boolean apply(Object input) {
+			return items.contains(input);
+		}
+
 	}
 
 
