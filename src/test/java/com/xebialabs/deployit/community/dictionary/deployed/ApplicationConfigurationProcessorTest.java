@@ -4,11 +4,10 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import com.xebialabs.deployit.community.dictionary.contributor.ApplicationConfigurationProcessor;
 import com.xebialabs.deployit.deployment.planner.DeltaSpecificationBuilder;
 import com.xebialabs.deployit.plugin.api.boot.PluginBooter;
-import com.xebialabs.deployit.plugin.api.deployment.execution.Plan;
 import com.xebialabs.deployit.plugin.api.deployment.specification.DeltaSpecification;
-import com.xebialabs.deployit.plugin.api.execution.Step;
 import com.xebialabs.deployit.plugin.api.reflect.Type;
 import com.xebialabs.deployit.plugin.api.udm.Container;
 import com.xebialabs.deployit.plugin.api.udm.Deployable;
@@ -29,7 +28,6 @@ import java.util.Map;
 
 import static com.google.common.collect.ImmutableList.of;
 import static com.xebialabs.deployit.test.support.TestUtils.*;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 
@@ -47,7 +45,6 @@ public class ApplicationConfigurationProcessorTest {
 			try {
 				final Deployable artifact = (Deployable) createArtifact("configuration.txt", "1.0", "data/configuration-file.properties", "test.File", input.newFolder());
 				artifact.setProperty("placeholders", ImmutableSet.of("CODE", "MKT"));
-				//artifact.setProperty("targetPath", "/tmp");
 				artifact.setProperty("targetDirectory", "/tmp");
 				return artifact;
 			} catch (Exception e) {
@@ -73,7 +70,10 @@ public class ApplicationConfigurationProcessorTest {
 				createDeploymentPackage("1.0", getDeployableArtifact()),
 				createEnvironment(getContainer()));
 
-		createDeployed();
+		final Map<String, String> placeholders = Maps.newHashMap();
+		placeholders.put("CODE", "MMM");
+		placeholders.put("MKT", "EUROPE");
+		createDeployed(placeholders);
 		assertDeployedCreatedCorrectly(of("MMM", "EUROPE"));
 	}
 
@@ -83,22 +83,47 @@ public class ApplicationConfigurationProcessorTest {
 				createDeploymentPackage("1.0", getDeployableArtifact(), getDeployableResource()),
 				createEnvironment(getContainer()));
 
-		createDeployed();
+		final Map<String, String> placeholders = Maps.newHashMap();
+		placeholders.put("CODE", "MMM");
+		placeholders.put("MKT", "<app-conf>");
+		createDeployed(placeholders);
 		assertDeployedCreatedCorrectly(of("MMM", "ASIA"));
 	}
 
-	private void createDeployed() {
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldCreateAndDestroyDeployedWithMissingApplicationConfiguration() throws Exception {
+		deployedApplication = createDeployedApplication(
+				createDeploymentPackage("1.0", getDeployableArtifact(), getDeployableResource()),
+				createEnvironment(getContainer()));
+
+		final Map<String, String> placeholders = Maps.newHashMap();
+		placeholders.put("CODE", "<app-conf>");
+		placeholders.put("MKT", "<app-conf>");
+		createDeployed(placeholders);
+		assertDeployedCreatedCorrectly(of("MMM", "ASIA"));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldCreateAndDestroyDeployedWithApplicationConfigurationButConfigured() throws Exception {
+		deployedApplication = createDeployedApplication(
+				createDeploymentPackage("1.0", getDeployableArtifact(), getDeployableResource()),
+				createEnvironment(getContainer()));
+
 		final Map<String, String> placeholders = Maps.newHashMap();
 		placeholders.put("CODE", "MMM");
-		placeholders.put("MKT", "EUROPE");
+		placeholders.put("MKT", "NASDAQ");
+		createDeployed(placeholders);
+		assertDeployedCreatedCorrectly(of("MMM", "ASIA"));
+	}
+
+	private void createDeployed(Map<String, String> placeholders) {
 		deployed = tester.generateDeployed(getDeployableArtifact(), getContainer(), Type.valueOf("test.DeployedFile"), placeholders);
 		DeltaSpecification spec = new DeltaSpecificationBuilder()
 				.initial(deployedApplication)
 				.create(deployed).build();
 
-		Plan resolvedPlan = tester.resolvePlan(spec);
-		Step.Result result = tester.executePlan(resolvedPlan, context);
-		assertThat(result, is(Step.Result.Success));
+		ApplicationConfigurationProcessor processor = new ApplicationConfigurationProcessor();
+		processor.injectPlaceholderValues(spec);
 	}
 
 	private void assertDeployedCreatedCorrectly(List<String> expectedContent) throws IOException {
