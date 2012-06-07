@@ -10,6 +10,7 @@ import com.xebialabs.deployit.plugin.api.deployment.execution.DeploymentStep;
 import com.xebialabs.deployit.plugin.api.deployment.planning.PrePlanProcessor;
 import com.xebialabs.deployit.plugin.api.deployment.specification.Delta;
 import com.xebialabs.deployit.plugin.api.deployment.specification.DeltaSpecification;
+import com.xebialabs.deployit.plugin.api.deployment.specification.Operation;
 import com.xebialabs.deployit.plugin.api.reflect.Type;
 import com.xebialabs.deployit.plugin.api.udm.Deployable;
 import com.xebialabs.deployit.plugin.api.udm.Deployed;
@@ -82,7 +83,8 @@ public class ApplicationConfigurationProcessor {
 			}
 		}
 
-		if (!validationErrors.isEmpty()) {
+		//Throw exception if we have messages and it is not undeployement.
+		if (!validationErrors.isEmpty() && !specification.getOperation().equals(Operation.DESTROY)) {
 			throw new IllegalArgumentException(buildErrorMessage(
 					specification.getDeployedApplication(), validationErrors));
 		}
@@ -98,7 +100,7 @@ public class ApplicationConfigurationProcessor {
 	}
 
 	private String candidateEntryButNotHavingTheExpectedPlaceholder(Deployed<?, ?> deployed, Map.Entry<String, String> entry) {
-		final String message = String.format("%s: has a candidate placeholder for application configuration '%s' but the value '%s' is not in %s",
+		final String message = String.format("%s: has a candidate placeholder for application configuration '%s' but the value '%s' is not in '%s'",
 				deployed, entry.getKey(), entry.getValue(), "<app-config>");
 		logger.error(message);
 		return message;
